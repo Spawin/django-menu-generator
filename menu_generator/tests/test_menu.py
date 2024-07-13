@@ -362,3 +362,11 @@ class MenuTestCase(TestCase):
         nav2 = get_menu(ctx, 'NAV_MENU')
         # Both menus should be equal
         self.assertEqual(nav1, nav2)
+    
+    def test_menu_multiple_validators_skip_on_false(self):
+        menu_dict = {
+            "validators": ["menu_generator.validators.is_staff", "this-is-never-evaluated"],
+        }
+        self.request.user = TestUser(authenticated=True)
+        self.menu.save_user_state(self.request)
+        self.assertFalse(self.menu._is_validated(menu_dict))
