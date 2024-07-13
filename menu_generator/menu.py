@@ -106,6 +106,9 @@ class MenuBase(object):
             for related_url in self._get_related_urls(item_dict):
                 if path_startswith(self.path, related_url):
                     return True
+            # Resolve URL and check if it relates to a related views
+            if resolve(self.path).func in self._get_related_views(item_dict):
+                return True
         return False
 
     def _is_root(self, item_dict):
